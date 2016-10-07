@@ -1,0 +1,61 @@
+---
+name: elasticsearch-deployment
+director_uuid: c9ff6012-3899-4540-bca1-77e05f5a32d0
+
+releases:
+- {name: elasticsearch-dev, version: latest}
+
+jobs:
+- instances: 6
+  name: elasticsearch
+  templates:
+  - name: elasticsearch
+    release: elasticsearch-dev
+  networks:
+  - name: default
+    static_ips:
+    - 10.244.60.2
+    - 10.244.60.3
+    - 10.244.60.4
+    - 10.244.60.5
+    - 10.244.60.6
+    - 10.244.60.7
+  persistent_disk: 4096
+  resource_pool: small_z1
+  properties:
+    elasticsearch:
+      cluster_name: elasticsearch
+      number_of_shards: 7
+      number_of_replicas: 5
+
+networks:
+- name: default
+  subnets: 
+  - gateway: 10.244.60.1
+    range: 10.244.60.0/28
+    static:
+    - 10.244.60.2 - 10.244.60.10
+  type: manual
+
+resource_pools:
+- name: small_z1
+  network: elasticsearch
+  stemcell:
+    name: bosh-warden-boshlite-ubuntu-trusty-go_agent
+    version: 3262.2
+  cloud_properties:
+    name: random
+
+compilation:
+  workers: 1 
+  network: default
+  reuse_compilation_vms: true
+  cloud_properties:
+    name: random
+
+update: 
+  canaries: 1
+  canary_watch_time: 10000-30000
+  max_in_flight: 2
+  serial: false
+  update_watch_time: 10000-30000

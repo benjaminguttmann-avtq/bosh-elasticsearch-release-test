@@ -1,0 +1,7 @@
+# abort script on any command that exits with a non zero value
+set -e -x 
+
+VERSION=jdk-8u101-linux-x64.tar.gz
+
+echo "extracting java ..."
+tar xvzf java/$VERSION -C ${BOSH_INSTALL_TARGET}

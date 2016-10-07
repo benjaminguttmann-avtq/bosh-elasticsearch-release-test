@@ -1,0 +1,37 @@
+---
+name: elasticsearch
+templates:
+  ctl.erb: bin/elasticsearch_ctl
+  monit_debugger: bin/monit_debugger
+  elasticsearch.yml.erb: config/elasticsearch.yml
+
+packages:
+ - elasticsearch
+ - java
+
+properties:
+  elasticsearch.cluster_name: 
+    description: The name of the elasticsearch cluster
+  elasticsearch.number_of_shards:
+    description: Default number of shards for an index
+  elasticsearch.number_of_replicas:
+    description: Default number of replicas
+  elasticsearch.node.master_nodes:
+    description: Array with IPs of Master Node IPs
+  elasticsearch.node.allow_master:
+    description: Allow node to become master? (true / false)
+    default: false
+  elasticsearch.node.allow_data:
+    description: Allow node to store data? (true / false)
+    default: false
+  elasticsearch.discovery.minimum_master_nodes:
+    description: The minimum number of master eligible nodes a node should "see" in order to operate within the cluster. Recommended to set it to a higher value than 1 when running more than 2 nodes in the cluster.
+    default: 2
+  elasticsearch.cluster.routing.allocation.disk.threshold_enabled:
+    description: Defaults to true. Set to false to disable the disk allocation decider.
+  elasticsearch.cluster.routing.allocation.disk.watermark.low:
+    description: Controls the low watermark for disk usage. It defaults to 85%, meaning ES will not allocate new shards to nodes once they have more than 85% disk used. It can also be set to an absolute byte value (like 500mb) to prevent ES from allocating shards if less than the configured amount of space is available.
+  elasticsearch.cluster.routing.allocation.disk.watermark.high:
+    description: Controls the high watermark. It defaults to 90%, meaning ES will attempt to relocate shards to another node if the node disk usage rises above 90%. It can also be set to an absolute byte value (similar to the low watermark) to relocate shards once less than the configured amount of space is available on the node.
+  elasticsearch.cluster.info.update.interval:
+    description: How often Elasticsearch should check on disk usage for each node in the cluster. Defaults to 30s.

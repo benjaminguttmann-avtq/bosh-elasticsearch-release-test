@@ -1,0 +1,7 @@
+---
+name: elasticsearch
+
+dependencies:
+
+files:
+- elasticsearch/elasticsearch-2.4.0.tar.gz # https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.4.0/elasticsearch-2.4.0.tar.gz

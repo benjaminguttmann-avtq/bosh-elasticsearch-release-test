@@ -1,0 +1,40 @@
+---
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/setup-configuration.html
+path:
+  logs: /var/vcap/sys/log/elasticsearch
+  data: /var/vcap/store/elasticsearch
+  work: /var/vcap/data/elasticsearch
+  conf: /var/vcap/jobs/elasticsearch/config
+  scripts: /var/vcap/data/elasticsearch/plugin-scripts
+  plugins: /var/vcap/data/elasticsearch/plugins
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery.html
+cluster:
+  name: <%= p('elasticsearch.cluster_name') %>
+  allocation:
+    disk:
+      threshold_enabled: <%= p('elasticsearch.cluster.routing.allocation.disk.threshold_enabled') %>
+      watermark:
+        low: <%= p('elasticsearch.cluster.routing.allocation.disk.watermark.low') %>
+        high: <%= p('elasticsearch.cluster.routing.allocation.disk.watermark.high') %>
+  info:
+    update:
+      interval: <%= p('elasticsearch.cluster.info.update.interval') %>
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-network.html
+network:
+  host:
+  - _local_
+  - _site_
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-network.html
+node:
+  master: <%= p("elasticsearch.node.allow_master") %>
+  data: <%= p("elasticsearch.node.allow_data") %>
+discovery:
+  zen:
+    ping:
+      unicast:
+        hosts: <%= p('elasticsearch.node.master_nodes').join(',') %>
+    minimum_master_nodes: <%= p("elasticsearch.discovery.minimum_master_nodes") %>
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules.html
+index:
+  number_of_shards: <%= p('elasticsearch.number_of_shards') %>
+  number_of_replicas: <%= p('elasticsearch.number_of_replicas') %>
